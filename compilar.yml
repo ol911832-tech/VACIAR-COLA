@@ -1,0 +1,25 @@
+name: Compilar el mod
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["**"]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compilar con el SDK de Geode de mod.json (5.11.2)
+        id: build
+        uses: geode-sdk/build-geode-mod@main
+        with:
+          sdk: given
+          target: Win64
+
+      - name: Subir el .geode
+        uses: actions/upload-artifact@v4
+        with:
+          name: vaciar-cola
+          path: ${{ steps.build.outputs.build-output }}
